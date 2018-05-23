@@ -26,20 +26,25 @@ namespace ImageThingyMajigy {
 			fs::current_path(destination);
 			for (auto i = files.begin(); i != files.end(); ++i) {
 				_stat(((fs::path)*i).string().c_str(), &attrib);
-				clock = gmtime(&(attrib.st_mtime));
+				clock = gmtime_s(&(attrib.st_mtime));
 				std::string modified_date = std::to_string(clock->tm_mon + 1) +
 					"-" + std::to_string(clock->tm_mday) +
 					"-" + std::to_string(clock->tm_year + 1900);
-				std::string formatted_date_str = destination.string() + "/" +
+				std::string extension = ((fs::path)*i).extension().string();
+				extension.erase(std::remove(extension.begin(), extension.end(),
+					'.'), extension.end());
+				std::string file_destination_str = destination.string() + "/" +
+					extension + "/" +
 					std::to_string(clock->tm_year + 1900) + "/" +
 					months.at(clock->tm_mon) + "/" + modified_date + "/" +
 					((fs::path) *i).filename().string();
-				std::replace(formatted_date_str.begin(), formatted_date_str.end(), '\\', '/');
-				fs::path formatted_date_path = (fs::path) formatted_date_str;
-				if (!fs::exists(formatted_date_path)) {
-					fs::create_directories(formatted_date_path);
+				std::replace(file_destination_str.begin(),
+					file_destination_str.end(), '\\', '/');
+				fs::path file_destination_path = (fs::path) file_destination_str;
+				if (!fs::exists(file_destination_path)) {
+					fs::create_directories(file_destination_path);
 				}
-				fs::rename((fs::path) *i, formatted_date_path);
+				fs::rename((fs::path) *i, file_destination_path);
 			}
 		}
 		fs::path dir_path;
