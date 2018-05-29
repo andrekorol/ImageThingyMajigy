@@ -1,6 +1,26 @@
+#ifndef IMAGETHINGYMAJIGY_IMAGETHINGYMAJIGY_H_
+#define IMAGETHINGYMAJIGY_IMAGETHINGYMAJIGY_H_
+
+#ifdef _WIN32
 #pragma once
 #include "stdafx.h"
+
 namespace fs = std::experimental::filesystem::v1;
+#else
+#include <cstdio>
+#include <cstdlib>
+#include <cerrno>
+#include <ctime>
+#include <algorithm>
+#include <unordered_map>
+#include <filesystem>
+#include <iostream>
+#include <string>
+#include <vector>
+
+#include <Magick++.h>
+namespace fs = std::filesystem;
+#endif // _WIN32
 
 namespace ImageThingyMajigy {
 	void Organize(fs::path destination) {
@@ -63,3 +83,4 @@ namespace ImageThingyMajigy {
 		}
 	}
 }
+#endif  // IMAGETHINGYMAJIGY_IMAGETHINGYMAJIGY_H_
