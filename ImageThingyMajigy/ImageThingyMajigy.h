@@ -6,7 +6,7 @@
 #include "stdafx.h"
 
 namespace fs = std::experimental::filesystem::v1;
-#else
+#else // _WIN32
 #include <cstdio>
 #include <cstdlib>
 #include <cerrno>
@@ -19,6 +19,7 @@ namespace fs = std::experimental::filesystem::v1;
 #include <vector>
 
 #include <Magick++.h>
+
 namespace fs = std::filesystem;
 #endif // _WIN32
 
