@@ -25,4 +25,3 @@
 #include <chrono>
 
 #include <Magick++.h>
-#include "cpptk.h"
