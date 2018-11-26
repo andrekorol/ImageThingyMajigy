@@ -7,7 +7,7 @@
 namespace fs = std::experimental::filesystem::v1;
 
 namespace ImageThingyMajigy {
-	void Organize(fs::path source, fs::path destination) {
+	void Organize(fs::path source, fs::path destination, std::string img_extension) {
 		std::vector<fs::path> files;
 		for (const auto &p : fs::recursive_directory_iterator(source)) {
 			if (fs::is_regular_file(p)) {
@@ -28,27 +28,29 @@ namespace ImageThingyMajigy {
 			errno_t errNum;
 			struct tm clock;
 			for (auto i = files.begin(); i != files.end(); ++i) {
-				auto ftime = fs::last_write_time((fs::path) *i);
-				std::time_t cftime = decltype(ftime)::clock::to_time_t(ftime); // assuming system clock
-				errNum = gmtime_s(&clock, &cftime);
-				std::string modified_date = std::to_string(clock.tm_mon + 1) +
-					"-" + std::to_string(clock.tm_mday) +
-					"-" + std::to_string(clock.tm_year + 1900);
 				std::string extension = ((fs::path)*i).extension().string();
 				extension.erase(std::remove(extension.begin(), extension.end(),
 					'.'), extension.end());
-				std::string file_destination_str = destination.string() + "/" +
-					extension + "/" +
-					std::to_string(clock.tm_year + 1900) + "/" +
-					months.at(clock.tm_mon) + "/" + modified_date + "/" +
-					((fs::path) *i).filename().string();
-				std::replace(file_destination_str.begin(),
-					file_destination_str.end(), '\\', '/');
-				fs::path file_destination_path = (fs::path) file_destination_str;
-				if (!fs::exists(file_destination_path)) {
-					fs::create_directories(file_destination_path);
+				if (extension == img_extension) {
+					auto ftime = fs::last_write_time((fs::path) *i);
+					std::time_t cftime = decltype(ftime)::clock::to_time_t(ftime); // assuming system clock
+					errNum = gmtime_s(&clock, &cftime);
+					std::string modified_date = std::to_string(clock.tm_mon + 1) +
+						"-" + std::to_string(clock.tm_mday) +
+						"-" + std::to_string(clock.tm_year + 1900);
+					std::string file_destination_str = destination.string() + "/" +
+						extension + "/" +
+						std::to_string(clock.tm_year + 1900) + "/" +
+						months.at(clock.tm_mon) + "/" + modified_date + "/" +
+						((fs::path) *i).filename().string();
+					std::replace(file_destination_str.begin(),
+						file_destination_str.end(), '\\', '/');
+					fs::path file_destination_path = (fs::path) file_destination_str;
+					if (!fs::exists(file_destination_path)) {
+						fs::create_directories(file_destination_path);
+					}
+					fs::rename((fs::path) *i, file_destination_path);
 				}
-				fs::rename((fs::path) *i, file_destination_path);
 			}
 		}
 		fs::path dir_path;

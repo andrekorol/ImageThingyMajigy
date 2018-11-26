@@ -16,7 +16,8 @@ int main(int argc, char **argv) {
 	Magick::InitializeMagick(*argv);
 	fs::path source = "F:/";
 	fs::path dest = "C:/Users/anrob/OneDrive/Imagens/SonyA100";
-	ImageThingyMajigy::Organize(source, dest);
+	std::string img_ext = "ARW";
+	ImageThingyMajigy::Organize(source, dest, img_ext);
 
 	/*init(argv[0]);
 	button(".b") - text("Say Hello") - command(hello);
