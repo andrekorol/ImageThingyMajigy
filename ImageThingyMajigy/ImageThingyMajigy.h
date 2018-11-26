@@ -7,10 +7,9 @@
 namespace fs = std::experimental::filesystem::v1;
 
 namespace ImageThingyMajigy {
-	void Organize(fs::path destination) {
-		fs::path top = fs::current_path();
+	void Organize(fs::path source, fs::path destination) {
 		std::vector<fs::path> files;
-		for (const auto &p : fs::recursive_directory_iterator(top)) {
+		for (const auto &p : fs::recursive_directory_iterator(source)) {
 			if (fs::is_regular_file(p)) {
 				files.push_back(p.path());
 			}
