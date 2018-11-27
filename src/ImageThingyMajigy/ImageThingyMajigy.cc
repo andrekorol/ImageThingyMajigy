@@ -23,7 +23,7 @@ namespace ImageThingyMajigy {
 			// Month (0-11; January = 0). Look at the clock assignment below.
 
 			fs::current_path(destination);
-			errno_t errNum;
+			int errNum;
 			struct tm clock;
 			for (auto i = files.begin(); i != files.end(); ++i) {
 				std::string extension = ((fs::path)*i).extension().string();
